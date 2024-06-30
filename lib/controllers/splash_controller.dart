@@ -1,6 +1,6 @@
 import 'dart:async';
 
-import 'package:daryo_uz_clone/screens/home_view/home_screen.dart';
+import 'package:daryo_uz_clone/screens/home_view/main_screen.dart';
 import 'package:flutter/material.dart';
 
 class SplashController {
