@@ -1,6 +1,10 @@
+import 'dart:ui';
+
+import 'package:daryo_uz_clone/screens/latest_screen.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/painting.dart';
+import 'package:flutter_zoom_drawer/flutter_zoom_drawer.dart';
 
 import '../../utils/app_colors.dart';
 import 'home_screen.dart';
@@ -14,12 +18,27 @@ class HomeView extends StatefulWidget {
   State<HomeView> createState() => _HomeViewState();
 }
 
-class _HomeViewState extends State<HomeView> {
+class _HomeViewState extends State<HomeView>
+    with SingleTickerProviderStateMixin {
+  var controller = TextEditingController();
+
   int _currentIndex = 0;
+  final ZoomDrawerController z = ZoomDrawerController();
 
-  String dropDown = list.first;
-
-
+  final listTexts = [
+    [],
+    [],
+    [],
+    [],
+    [],
+    ["Andion,Buxoro,Jizzax", "Namanga", "Fargona", "Sirdaryo", "Toshkent"],
+    ["Asia", "North America"],
+    ["Asia", "North America"],
+    ["Asia", "North America"],
+    ["Asia", "North America"],
+    ["Asia", "North America"],
+    ["Asia", "North America"],
+  ];
   final colors = [
     Colors.blue,
     Colors.blue,
@@ -36,26 +55,56 @@ class _HomeViewState extends State<HomeView> {
     Colors.black,
   ];
   final List<Widget> pages = [
-   SingleChildScrollView(
-     padding: EdgeInsets.symmetric(horizontal: 20),
-     child: const HomeScreen(),
-   ),
-    SingleChildScrollView(
+    const SingleChildScrollView(
       padding: EdgeInsets.symmetric(horizontal: 20),
-      child: const HomeScreen(),
+      child: HomeScreen(),
     ),
-    const Text("Most read"),
-    const Text("Columnists"),
-    const Text("Multimedia"),
-    const Text("Uzbekistan"),
-    const Text("World"),
-    const Text("Culture"),
-    const Text("Lifestyle"),
-    const Text('Sport'),
-    const Text('Money'),
-    const Text('Central Asia'),
+    const SingleChildScrollView(
+      padding: EdgeInsets.symmetric(horizontal: 20),
+      child: LatestScreen(),
+    ),
+    const SingleChildScrollView(
+      padding: EdgeInsets.symmetric(horizontal: 20),
+      child: LatestScreen(),
+    ),
+    const SingleChildScrollView(
+      padding: EdgeInsets.symmetric(horizontal: 20),
+      child: LatestScreen(),
+    ),
+    const SingleChildScrollView(
+      padding: EdgeInsets.symmetric(horizontal: 20),
+      child: LatestScreen(),
+    ),
+    const SingleChildScrollView(
+      padding: EdgeInsets.symmetric(horizontal: 20),
+      child: LatestScreen(),
+    ),
+    const SingleChildScrollView(
+      padding: EdgeInsets.symmetric(horizontal: 20),
+      child: LatestScreen(),
+    ),
+    const SingleChildScrollView(
+      padding: EdgeInsets.symmetric(horizontal: 20),
+      child: LatestScreen(),
+    ),
+    const SingleChildScrollView(
+      padding: EdgeInsets.symmetric(horizontal: 20),
+      child: LatestScreen(),
+    ),
+    const SingleChildScrollView(
+      padding: EdgeInsets.symmetric(horizontal: 20),
+      child: LatestScreen(),
+    ),
+    const SingleChildScrollView(
+      padding: EdgeInsets.symmetric(horizontal: 20),
+      child: LatestScreen(),
+    ),
+    const SingleChildScrollView(
+      padding: EdgeInsets.symmetric(horizontal: 20),
+      child: LatestScreen(),
+    ),
   ];
-  List<String> _buttonTexts = [
+  final List<String> _buttonTexts = [
     "Main",
     "Latest",
     "Most read",
@@ -85,9 +134,13 @@ class _HomeViewState extends State<HomeView> {
   ];
 
   void _changePage(int newIndex) {
-    setState(() {
-      _currentIndex = newIndex;
-    });
+    if (_currentIndex != newIndex) {
+      setState(() {
+        _currentIndex = newIndex;
+      });
+    } else {
+      z.toggle!();
+    }
   }
 
   @override
@@ -96,9 +149,65 @@ class _HomeViewState extends State<HomeView> {
       appBar: AppBar(
         surfaceTintColor: Colors.grey.shade300,
         centerTitle: true,
-        leading: const Icon(
-          Icons.search,
-          size: 30,
+        leading: GestureDetector(
+          onTap: () {
+            showCupertinoModalPopup(
+              barrierDismissible: false,
+              context: context,
+              filter: ImageFilter.blur(sigmaX: 10.0, sigmaY: 4.0),
+              builder: (context) {
+                return Container(
+                  color: Colors.black26,
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      const Text(
+                        "What are we looking for?",
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 18,
+                          decoration: TextDecoration.none,
+                        ),
+                      ),
+                      const SizedBox(height: 8),
+                      Container(
+                        margin: const EdgeInsets.symmetric(horizontal: 30),
+                        child: CupertinoTextField(
+                          controller: controller,
+                        ),
+                      ),
+                      const SizedBox(height: 16),
+                      controller.text.isEmpty
+                          ? const SizedBox.shrink()
+                          : Container(
+                              height: 50,
+                              margin:
+                                  const EdgeInsets.symmetric(horizontal: 50),
+                              decoration: BoxDecoration(
+                                color: AppColors.subtitleColor,
+                                borderRadius: BorderRadius.circular(10),
+                              ),
+                              child: const Center(
+                                child: Text(
+                                  "Send",
+                                  style: TextStyle(
+                                    color: Colors.white,
+                                    fontSize: 14,
+                                    decoration: TextDecoration.none,
+                                  ),
+                                ),
+                              ),
+                            ),
+                    ],
+                  ),
+                );
+              },
+            );
+          },
+          child: const Icon(
+            Icons.search,
+            size: 30,
+          ),
         ),
         title: Row(
           mainAxisAlignment: MainAxisAlignment.center,
@@ -113,20 +222,24 @@ class _HomeViewState extends State<HomeView> {
             Text(
               "DARYO",
               style: TextStyle(
-                  color: AppColors.titleColor,
-                  fontSize: 22,
-                  fontWeight: FontWeight.w800),
+                color: AppColors.titleColor,
+                fontSize: 22,
+                fontWeight: FontWeight.w800,
+              ),
             ),
           ],
         ),
         actions: [
-          Container(
-            margin: EdgeInsets.only(bottom: 10),
-            height: 50,
-            width: 50,
-            color: Colors.white,
-            child: const Center(
-              child: Icon(Icons.menu),
+          GestureDetector(
+            onTap: () {},
+            child: Container(
+              margin: const EdgeInsets.only(bottom: 10),
+              height: 50,
+              width: 50,
+              color: Colors.white,
+              child: const Center(
+                child: Icon(Icons.menu),
+              ),
             ),
           ),
         ],
@@ -134,6 +247,12 @@ class _HomeViewState extends State<HomeView> {
       ),
       body: Column(
         children: [
+          _currentIndex >= 5
+              ? const SizedBox(height: 10)
+              : const SizedBox.shrink(),
+          _currentIndex >= 5
+              ? makeType(colors[_currentIndex], _buttonTexts[_currentIndex])
+              : const SizedBox.shrink(),
           Stack(
             children: [
               Container(
@@ -145,27 +264,33 @@ class _HomeViewState extends State<HomeView> {
                   border: Border.all(color: Colors.black12),
                   color: Colors.white,
                 ),
-                child: _currentIndex == 0 ? SizedBox.shrink() : Row(
-                  mainAxisAlignment: MainAxisAlignment.end,
-
-                  children: [
-                  IconButton(onPressed: (){}, icon: Icon(Icons.laptop),),
-                  IconButton(onPressed: (){}, icon: Icon(Icons.list),),
-                ],),
+                child: _currentIndex == 0
+                    ? const SizedBox.shrink()
+                    : Row(
+                        mainAxisAlignment: MainAxisAlignment.end,
+                        children: [
+                          IconButton(
+                            onPressed: () {},
+                            icon: const Icon(Icons.laptop),
+                          ),
+                          IconButton(
+                            onPressed: () {},
+                            icon: const Icon(Icons.list),
+                          ),
+                        ],
+                      ),
               ),
-              
               DropdownButton(
                 padding:
                     const EdgeInsets.symmetric(horizontal: 30, vertical: 16),
                 borderRadius: BorderRadius.circular(20),
-                // icon: const Icon(Icons.arrow_forward_ios),
                 underline: const SizedBox.shrink(),
                 onChanged: (value) {
                   setState(() {
-                    dropDown = value!;
+                    // You should implement the logic here if needed
                   });
                 },
-                value: dropDown,
+                value: list.first,
                 items: list.map<DropdownMenuItem<String>>((String value) {
                   return DropdownMenuItem(
                     value: value,
@@ -188,47 +313,75 @@ class _HomeViewState extends State<HomeView> {
         padding: const EdgeInsets.all(8),
         height: 72,
         decoration: const BoxDecoration(
-            color: Colors.white,
-            border: Border(top: BorderSide(color: Colors.blue, width: 1.5))),
+          color: Colors.white,
+          border: Border(top: BorderSide(color: Colors.blue, width: 1.5)),
+        ),
         child: ListView.builder(
-            itemCount: _buttonIcons.length,
-            scrollDirection: Axis.horizontal,
-            itemBuilder: (context, index) {
-              return GestureDetector(
-                onTap: () => _changePage(index),
-                child: Container(
-                  margin: const EdgeInsets.only(left: 30),
-                  child: Column(
-                    children: [
-                      Row(
-                        children: [
-                          index > 4 ? Container(
-                            height: 16,
-                            width: 4,
-                            color: colors[index],
-                          ) : const SizedBox.shrink(),
-                          Icon(
-                            _buttonIcons[index],
-                            color: index == _currentIndex
-                                ? Colors.blue
-                                : AppColors.subtitleColor,
-                            size: 28,
-                          ),
-                        ],
+          itemCount: _buttonIcons.length,
+          scrollDirection: Axis.horizontal,
+          itemBuilder: (context, index) {
+            return GestureDetector(
+              onTap: () => _changePage(index),
+              child: Container(
+                margin: const EdgeInsets.only(left: 30),
+                child: Column(
+                  children: [
+                    Row(
+                      children: [
+                        index > 4
+                            ? Container(
+                                height: 16,
+                                width: 4,
+                                color: colors[index],
+                              )
+                            : const SizedBox.shrink(),
+                        Icon(
+                          _buttonIcons[index],
+                          color: index == _currentIndex
+                              ? Colors.blue
+                              : AppColors.subtitleColor,
+                          size: 28,
+                        ),
+                      ],
+                    ),
+                    const SizedBox(height: 5),
+                    Text(
+                      _buttonTexts[index],
+                      style: TextStyle(
+                        color: index == _currentIndex
+                            ? Colors.blue
+                            : AppColors.subtitleColor,
                       ),
-                      const SizedBox(height: 5),
-                      Text(
-                        _buttonTexts[index],
-                        style: TextStyle(
-                            color: index == _currentIndex
-                                ? Colors.blue
-                                : AppColors.subtitleColor),
-                      )
-                    ],
-                  ),
+                    )
+                  ],
                 ),
-              );
-            }),
+              ),
+            );
+          },
+        ),
+      ),
+    );
+  }
+
+  Widget makeType(Color myColor, String text) {
+    return Container(
+      padding: const EdgeInsets.all(8),
+      margin: const EdgeInsets.symmetric(horizontal: 20),
+      height: 40,
+      width: double.maxFinite,
+      decoration: BoxDecoration(
+        color: myColor,
+      ),
+      child: Row(
+        children: [
+          Container(
+            height: 16,
+            width: 4,
+            color: Colors.blue,
+          ),
+          const SizedBox(width: 4),
+          Text(text),
+        ],
       ),
     );
   }

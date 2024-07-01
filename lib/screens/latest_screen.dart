@@ -7,14 +7,14 @@ import 'package:flutter/material.dart';
 
 import '../../models/main_page_model.dart';
 
-class HomeScreen extends StatefulWidget {
-  const HomeScreen({super.key});
+class LatestScreen extends StatefulWidget {
+  const LatestScreen({super.key});
 
   @override
-  State<HomeScreen> createState() => _HomeScreenState();
+  State<LatestScreen> createState() => _LatestScreenState();
 }
 
-class _HomeScreenState extends State<HomeScreen> {
+class _LatestScreenState extends State<LatestScreen> {
   bool isLoading = false;
 
   @override

@@ -1,20 +1,18 @@
-import 'dart:math';
+import 'package:flutter/material.dart';
 
 import 'package:daryo_uz_clone/screens/detail_screen.dart';
 import 'package:daryo_uz_clone/utils/app_colors.dart';
-import 'package:flutter/cupertino.dart';
-import 'package:flutter/material.dart';
 
 import '../../models/main_page_model.dart';
 
-class HomeScreen extends StatefulWidget {
-  const HomeScreen({super.key});
+class ExpandScreen extends StatefulWidget {
+  const ExpandScreen({super.key});
 
   @override
-  State<HomeScreen> createState() => _HomeScreenState();
+  State<ExpandScreen> createState() => _ExpandScreenState();
 }
 
-class _HomeScreenState extends State<HomeScreen> {
+class _ExpandScreenState extends State<ExpandScreen> {
   bool isLoading = false;
 
   @override
@@ -28,15 +26,6 @@ class _HomeScreenState extends State<HomeScreen> {
       setState(() {
         isLoading = false;
       });
-    });
-
-    shuffleList();
-  }
-
-  void shuffleList() {
-    final random = Random();
-    setState(() {
-      posts.shuffle(random);
     });
   }
 

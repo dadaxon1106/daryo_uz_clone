@@ -7,14 +7,14 @@ import 'package:flutter/material.dart';
 
 import '../../models/main_page_model.dart';
 
-class HomeScreen extends StatefulWidget {
-  const HomeScreen({super.key});
+class CategoryScreen extends StatefulWidget {
+  const CategoryScreen({super.key});
 
   @override
-  State<HomeScreen> createState() => _HomeScreenState();
+  State<CategoryScreen> createState() => _CategoryScreenState();
 }
 
-class _HomeScreenState extends State<HomeScreen> {
+class _CategoryScreenState extends State<CategoryScreen> {
   bool isLoading = false;
 
   @override
@@ -106,17 +106,29 @@ class _HomeScreenState extends State<HomeScreen> {
             child: CircularProgressIndicator(),
           )
         : Column(
-            children: List.generate(posts.length, (index) {
-            return GestureDetector(
-                onTap: () {
-                  Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) =>
-                              DetailScreen(post: posts[index])));
-                },
-                child: makeHome(posts[index]));
-          }));
+            children: [
+              Container(
+                height: 80,
+                width: double.maxFinite,
+                decoration: BoxDecoration(
+                  color: Colors.purpleAccent,
+                  borderRadius: BorderRadius.circular(6),
+                ),
+              ),
+              Column(
+                  children: List.generate(posts.length, (index) {
+                return GestureDetector(
+                    onTap: () {
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) =>
+                                  DetailScreen(post: posts[index])));
+                    },
+                    child: makeHome(posts[index]));
+              })),
+            ],
+          );
   }
 
   Widget makeHome(NewsPost post) {
