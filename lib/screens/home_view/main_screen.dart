@@ -1,52 +1,60 @@
-import 'package:daryo_uz_clone/screens/home_view/home_screen.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
+import 'package:flutter/painting.dart';
 
 import '../../utils/app_colors.dart';
+import 'home_screen.dart';
 
-const List<String> list = ["Lotin", "Kирилл", "English", "Русский"];
-enum SampleItem { itemOne, itemTwo, itemThree }
-
+final List<String> list = ["Lotin", "Kирилл", "English", "Русский"];
 
 class HomeView extends StatefulWidget {
-  const HomeView({super.key});
+  const HomeView({Key? key}) : super(key: key);
 
   @override
   State<HomeView> createState() => _HomeViewState();
 }
 
 class _HomeViewState extends State<HomeView> {
-  SampleItem? item;
-  final GlobalKey<PopupMenuButtonState> _menuKey = GlobalKey();
-  int _selectIndex = 0;
+  int _currentIndex = 0;
+
   String dropDown = list.first;
 
 
-  int _currentIndex = 0;
-  List<Widget> pages = [];
-
-  Widget? _pageIndex;
-  @override
-  void initState() {
-    super.initState();
-    pages
-      ..add(const HomeView())
-      ..add(const Text("Main"))
-      ..add(const Text("Main"))
-      ..add(const Text("Main"))
-      ..add(const Text("Main"))
-      ..add(const Text("Main"))
-      ..add(const Text("Main"))
-      ..add(const Text("Main"))
-      ..add(const Text("Main"))
-      ..add(const Text("Main"))
-      ..add(const Text("Main"))
-      ..add(const  Text("Most read"));
-
-    _pageIndex = const HomeScreen();
-  }
-
+  final colors = [
+    Colors.blue,
+    Colors.blue,
+    Colors.blue,
+    Colors.teal,
+    Colors.brown,
+    Colors.blue,
+    Colors.red,
+    Colors.teal,
+    Colors.green,
+    Colors.orange,
+    Colors.yellow,
+    Colors.black,
+    Colors.black,
+  ];
+  final List<Widget> pages = [
+   SingleChildScrollView(
+     padding: EdgeInsets.symmetric(horizontal: 20),
+     child: const HomeScreen(),
+   ),
+    SingleChildScrollView(
+      padding: EdgeInsets.symmetric(horizontal: 20),
+      child: const HomeScreen(),
+    ),
+    const Text("Most read"),
+    const Text("Columnists"),
+    const Text("Multimedia"),
+    const Text("Uzbekistan"),
+    const Text("World"),
+    const Text("Culture"),
+    const Text("Lifestyle"),
+    const Text('Sport'),
+    const Text('Money'),
+    const Text('Central Asia'),
+  ];
   List<String> _buttonTexts = [
     "Main",
     "Latest",
@@ -61,22 +69,6 @@ class _HomeViewState extends State<HomeView> {
     "Money",
     "Central Asia",
   ];
-
-  static const List<Widget> _widgetOptions = [
-    Text("Main"),
-    HomeScreen(),
-    Text("Most read"),
-    Text("Columnists"),
-    Text("Multimedia"),
-    Text("Uzbekistan"),
-    Text("World"),
-    Text("Culture"),
-    Text("Lifestyle"),
-    Text('Sport'),
-    Text('Money'),
-    Text('Central Asia')
-  ];
-
   final List<IconData> _buttonIcons = [
     CupertinoIcons.list_bullet_below_rectangle,
     CupertinoIcons.line_horizontal_3_decrease,
@@ -92,17 +84,17 @@ class _HomeViewState extends State<HomeView> {
     Icons.sports_baseball,
   ];
 
-  void _onTapItem(int index) {
+  void _changePage(int newIndex) {
     setState(() {
-      _selectIndex = index;
+      _currentIndex = newIndex;
     });
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white,
       appBar: AppBar(
+        surfaceTintColor: Colors.grey.shade300,
         centerTitle: true,
         leading: const Icon(
           Icons.search,
@@ -133,53 +125,64 @@ class _HomeViewState extends State<HomeView> {
             height: 50,
             width: 50,
             color: Colors.white,
-            child:const Center(
+            child: const Center(
               child: Icon(Icons.menu),
             ),
           ),
         ],
         backgroundColor: Colors.grey.shade300,
       ),
-      body: SingleChildScrollView(
-        child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-          child: Column(
+      body: Column(
+        children: [
+          Stack(
             children: [
-              Stack(
-                children:[
-                  Container(
-                    padding: const EdgeInsets.all(8),
-                    height: 50,
-                    decoration: BoxDecoration(
-                      border: Border.all(color: Colors.black12),
-                      color: Colors.white,
-                    ),
-                  ),
-                  DropdownButton(
-                    padding: const EdgeInsets.symmetric(horizontal: 8),
-                    borderRadius: BorderRadius.circular(20),
-                    // icon: const Icon(Icons.arrow_forward_ios),
-                    underline: const SizedBox.shrink(),
-                    onChanged: (value) {
-                      setState(() {
-                        dropDown = value!;
-                      });
-                    },
-                    value: dropDown,
-                    items: list.map<DropdownMenuItem<String>>((String value) {
-                      return DropdownMenuItem(
-                        value: value,
-                        child: Text(value),
-                      );
-                    }).toList(),
-                  ),
-                ]
+              Container(
+                width: double.maxFinite,
+                margin: const EdgeInsets.only(left: 20, right: 20, top: 20),
+                padding: const EdgeInsets.only(bottom: 20),
+                height: 50,
+                decoration: BoxDecoration(
+                  border: Border.all(color: Colors.black12),
+                  color: Colors.white,
+                ),
+                child: _currentIndex == 0 ? SizedBox.shrink() : Row(
+                  mainAxisAlignment: MainAxisAlignment.end,
+
+                  children: [
+                  IconButton(onPressed: (){}, icon: Icon(Icons.laptop),),
+                  IconButton(onPressed: (){}, icon: Icon(Icons.list),),
+                ],),
               ),
-              const SizedBox(height: 10),
-              _pageIndex!,
+              
+              DropdownButton(
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 30, vertical: 16),
+                borderRadius: BorderRadius.circular(20),
+                // icon: const Icon(Icons.arrow_forward_ios),
+                underline: const SizedBox.shrink(),
+                onChanged: (value) {
+                  setState(() {
+                    dropDown = value!;
+                  });
+                },
+                value: dropDown,
+                items: list.map<DropdownMenuItem<String>>((String value) {
+                  return DropdownMenuItem(
+                    value: value,
+                    child: Text(value),
+                  );
+                }).toList(),
+              ),
             ],
           ),
-        ),
+          const SizedBox(height: 10),
+          Expanded(
+            child: IndexedStack(
+              index: _currentIndex,
+              children: pages,
+            ),
+          ),
+        ],
       ),
       bottomNavigationBar: Container(
         padding: const EdgeInsets.all(8),
@@ -197,12 +200,21 @@ class _HomeViewState extends State<HomeView> {
                   margin: const EdgeInsets.only(left: 30),
                   child: Column(
                     children: [
-                      Icon(
-                        _buttonIcons[index],
-                        color: index == _currentIndex
-                            ? Colors.blue
-                            : AppColors.subtitleColor,
-                        size: 28,
+                      Row(
+                        children: [
+                          index > 4 ? Container(
+                            height: 16,
+                            width: 4,
+                            color: colors[index],
+                          ) : const SizedBox.shrink(),
+                          Icon(
+                            _buttonIcons[index],
+                            color: index == _currentIndex
+                                ? Colors.blue
+                                : AppColors.subtitleColor,
+                            size: 28,
+                          ),
+                        ],
                       ),
                       const SizedBox(height: 5),
                       Text(
@@ -219,11 +231,5 @@ class _HomeViewState extends State<HomeView> {
             }),
       ),
     );
-  }
-  void _changePage(int currentIndex) {
-    setState(() {
-      _currentIndex = currentIndex;
-      _pageIndex = pages[currentIndex];
-    });
   }
 }
